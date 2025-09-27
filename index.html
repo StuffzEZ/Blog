@@ -7,6 +7,23 @@
     <meta name="google-site-verification" content="7YiubERgaN8UtgdeR5wA3DPIY8cN4lQLJF37hXYNMSw" />
     <title>Stufz</title>
     <link rel="stylesheet" href="posts/assets/css/main.css">
+    <style>
+    .post {
+        cursor: pointer;
+        margin-bottom: 1.5em;
+    }
+
+    .post h2 {
+        font-size: 1.2em;
+        margin-bottom: 0.3em;
+    }
+
+    .post p.preview {
+        font-size: 1em;
+        color: #333;
+        line-height: 1.4em;
+    }
+    </style>
 </head>
 <body>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/themium/FrameworkV0@main/v0.css">
@@ -26,16 +43,16 @@
     <p>hi im StuffzEZ! i make cool stuff.</p>
     <div id="posts" class="posts-container"></div>
 
-   <script>
+    <script>
     // 🔧 Change these values to your repo details
     const repoUser = "StuffzEZ";
     const repoName = "Blog";
     const branch = "main";
 
     async function loadPosts() {
-      const container = document.getElementById("posts");
+        const container = document.getElementById("posts");
 
-      try {
+        try {
         // Get list of files in posts/ from GitHub API
         const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/contents/posts?ref=${branch}`;
         const apiRes = await fetch(apiUrl);
@@ -46,49 +63,52 @@
         const htmlFiles = files.filter(f => f.name.endsWith(".html"));
 
         if (htmlFiles.length === 0) {
-          container.innerHTML = `<p class="noposts">There are no posts yet.</p>`;
-          return;
+            container.innerHTML = `<p class="noposts">There are no posts yet.</p>`;
+            return;
         }
 
         for (const file of htmlFiles) {
-          // Build raw file URL
-          const rawUrl = `https://raw.githubusercontent.com/${repoUser}/${repoName}/refs/heads/${branch}/posts/${file.name}`;
-          const res = await fetch(rawUrl);
-          if (!res.ok) throw new Error("Failed to fetch " + file.name);
-          const text = await res.text();
+            // Build raw file URL
+            const rawUrl = `https://raw.githubusercontent.com/${repoUser}/${repoName}/refs/heads/${branch}/posts/${file.name}`;
+            const res = await fetch(rawUrl);
+            if (!res.ok) throw new Error("Failed to fetch " + file.name);
+            const text = await res.text();
 
-          // Parse HTML
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(text, "text/html");
+            // Parse HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, "text/html");
 
-          const title = doc.querySelector("#title-forpost")?.innerHTML || "Untitled";
-          const content = doc.querySelector("#maincontent-forpost")?.innerHTML || "";
+            const title = doc.querySelector("#title-forpost")?.innerText || "Untitled";
+            const content = doc.querySelector("#maincontent-forpost")?.innerText || "";
 
-          // Remove .html extension for link
-          const postId = file.name.replace(".html", "");
+            // Make preview (first 200 characters)
+            const preview = content.length > 200 ? content.slice(0, 200) + "..." : content;
 
-          // Create post element
-          const div = document.createElement("div");
-          div.className = "post";
-          div.innerHTML = `
+            // Remove .html extension for link
+            const postId = file.name.replace(".html", "");
+
+            // Create post element
+            const div = document.createElement("div");
+            div.className = "post";
+            div.innerHTML = `
             <h2>${title}</h2>
-            <div>${content}</div>
-          `;
+            <p class="preview">${preview}</p>
+            `;
 
-          // Make clickable
-          div.addEventListener("click", () => {
+            // Make clickable
+            div.addEventListener("click", () => {
             window.location.href = `posts/${postId}`;
-          });
+            });
 
-          container.appendChild(div);
+            container.appendChild(div);
         }
-      } catch (err) {
+        } catch (err) {
         console.error(err);
         container.innerHTML = `<p class="noposts">Error loading posts.</p>`;
-      }
+        }
     }
 
     loadPosts();
-  </script>
+    </script>
 </body>
 </html>
