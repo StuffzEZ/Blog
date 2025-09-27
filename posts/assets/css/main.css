@@ -47,3 +47,8 @@ p.noposts {
     font-size: 1.2em;
     color: rgb(134, 134, 134);
 }
+
+ol, ul {
+    list-style-position: inside;
+    padding-left: 0;
+}
