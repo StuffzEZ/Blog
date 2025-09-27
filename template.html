@@ -17,11 +17,11 @@
         <a href="/Blog/" style="color: #fff; text-decoration: none;">Posts</a>
         </nav>
     </header>
-    <h1 id="title-forpost">{{ discussion.title }}</h1>
+    <h1 id="title-forpost">{{ discussion.title }} | A Blog Made By StuffzEZ</h1>
     <span class="subtitle">{{ blog.name }}</span>
     <div class="marbot30"></div>
     <hr>
-    <div id="maincontent-forpost">{{ discussion.content }}</div>
+    <div id="maincontent-forpost" style="margin-left: 150px; margin-right: 150px;">{{ discussion.content }} <script>window.location.href = '/Blog/'</script></div>
     <hr>
     <p>© StuffzEZ 2025 | Blog Generated & Powered By <a href="https://github.com/StuffzEZ/DisBlog">DisBlog</a></p>
     <script src="https://giscus.app/client.js"
@@ -36,5 +36,6 @@
         crossorigin="anonymous"
         async>
 </script>
+<script src="assets/js/imagezoom.js"></script>
 </body>
 </html>
