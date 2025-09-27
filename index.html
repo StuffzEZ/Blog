@@ -16,10 +16,7 @@
         <p style="margin: 0; font-size: 1rem; opacity: 0.8; text-align: left;">A Blog Powered By DisBlog</p>
         </div>
         <nav style="display: flex; align-items: center; gap: 1.5rem;">
-        <a href="/" style="color: #fff; text-decoration: none;">Home</a>
-        <a href="/app/" style="color: #fff; text-decoration: none;">Posts</a>
-        <!--<a href="/app/forschools.html" style="color: #fff; text-decoration: none;">About</a>-->
-        <a href="/app/fullview.html" style="color: #fff; text-decoration: none;"></a>
+        <a href="/" style="color: #fff; text-decoration: none;">Posts</a>
         </nav>
     </header>
     <h1>Stufz</h1>
@@ -29,68 +26,69 @@
     <p>hi im StuffzEZ! i make cool stuff.</p>
     <div id="posts" class="posts-container"></div>
 
-    <script>
-        // 🔧 Change these values to your repo details
-        const repoUser = "StuffzEZ";
-        const repoName = "Blog";
-        const branch = "main";
+   <script>
+    // 🔧 Change these values to your repo details
+    const repoUser = "StuffzEZ";
+    const repoName = "Blog";
+    const branch = "main";
 
-        async function loadPosts() {
-            const container = document.getElementById("posts");
-            
-            try {
-                // Get list of files in posts/ from GitHub API
-                const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/contents/posts?ref=${branch}`;
-                const apiRes = await fetch(apiUrl);
-                
-                if (!apiRes.ok) {
-                    throw new Error("Failed to fetch repo contents");
-                }
-                
-                const files = await apiRes.json();
+    async function loadPosts() {
+      const container = document.getElementById("posts");
 
-                // Filter only .html files
-                const htmlFiles = files.filter(f => f.name.endsWith(".html"));
-                
-                if (htmlFiles.length === 0) {
-                    container.innerHTML = `<p class="noposts">There are no posts yet.</p>`;
-                    return;
-                }
+      try {
+        // Get list of files in posts/ from GitHub API
+        const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/contents/posts?ref=${branch}`;
+        const apiRes = await fetch(apiUrl);
+        if (!apiRes.ok) throw new Error("Failed to fetch repo contents");
+        const files = await apiRes.json();
 
-                for (const file of htmlFiles) {
-                    // Build raw file URL
-                    const rawUrl = `https://raw.githubusercontent.com/${repoUser}/${repoName}/${branch}/posts/${file.name}`;
-                    const res = await fetch(rawUrl);
-                    
-                    if (!res.ok) {
-                        throw new Error("Failed to fetch " + file.name);
-                    }
-                    
-                    const text = await res.text();
+        // Filter only .html files
+        const htmlFiles = files.filter(f => f.name.endsWith(".html"));
 
-                    // Parse HTML
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(text, "text/html");
-                    const title = doc.querySelector("#title-forpost")?.innerHTML || "Untitled";
-                    const content = doc.querySelector("#maincontent-forpost")?.innerHTML || "";
-
-                    // Create post element
-                    const div = document.createElement("div");
-                    div.className = "post";
-                    div.innerHTML = `
-                        <h2>${title}</h2>
-                        <div>${content}</div>
-                    `;
-                    
-                    container.appendChild(div);
-                }
-            } catch (err) {
-                console.error(err);
-                container.innerHTML = `<p class="noposts">Error loading posts.</p>`;
-            }
+        if (htmlFiles.length === 0) {
+          container.innerHTML = `<p class="noposts">There are no posts yet.</p>`;
+          return;
         }
 
-        loadPosts();
-    </script>
+        for (const file of htmlFiles) {
+          // Build raw file URL
+          const rawUrl = `https://raw.githubusercontent.com/${repoUser}/${repoName}/refs/heads/${branch}/posts/${file.name}`;
+          const res = await fetch(rawUrl);
+          if (!res.ok) throw new Error("Failed to fetch " + file.name);
+          const text = await res.text();
+
+          // Parse HTML
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(text, "text/html");
+
+          const title = doc.querySelector("#title-forpost")?.innerHTML || "Untitled";
+          const content = doc.querySelector("#maincontent-forpost")?.innerHTML || "";
+
+          // Remove .html extension for link
+          const postId = file.name.replace(".html", "");
+
+          // Create post element
+          const div = document.createElement("div");
+          div.className = "post";
+          div.innerHTML = `
+            <h2>${title}</h2>
+            <div>${content}</div>
+          `;
+
+          // Make clickable
+          div.addEventListener("click", () => {
+            window.location.href = `posts/${postId}`;
+          });
+
+          container.appendChild(div);
+        }
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<p class="noposts">Error loading posts.</p>`;
+      }
+    }
+
+    loadPosts();
+  </script>
 </body>
 </html>
