@@ -86,8 +86,8 @@ jobs:
             python3 << 'PYTHON_EOF'
           import re
           
-          # Read the existing HTML file
-          with open('${{ steps.discussion.outputs.number }}.html'.replace('${{ steps.discussion.outputs.number }}', '${{ steps.discussion.outputs.number }}'), 'r') as f:
+          # Read the existing HTML file from the posts directory
+          with open('posts/${{ steps.discussion.outputs.number }}.html', 'r') as f:
               existing_html = f.read()
           
           # Read the new content
@@ -103,7 +103,7 @@ jobs:
           existing_html = re.sub(r'(<[^>]*id=["\']maincontent-forpost["\'][^>]*>).*?(<\/[^>]*>)', 
                                 r'\1' + new_content + r'\2', existing_html, flags=re.DOTALL)
           
-          # Write the updated file
+          # Write the updated file back to the posts directory
           with open('posts/${{ steps.discussion.outputs.number }}.html', 'w') as f:
               f.write(existing_html)
           PYTHON_EOF
