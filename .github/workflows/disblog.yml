@@ -2,14 +2,14 @@ name: DisBlog
 
 on:
   discussion:
-    types: [created]
+    types: [created, edited]
 
 permissions:
   contents: write
   discussions: read
 
 jobs:
-  create-post:
+  create-or-update-post:
     runs-on: ubuntu-latest
     
     steps:
@@ -59,7 +59,7 @@ jobs:
           echo "$html_content" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
             
-      - name: Create post from template
+      - name: Create or update post from template
         env:
           GIST_URL: ${{ vars.TEMPLATE_GIST_URL }}  # You'll need to set this as a repository variable
           BLOG_NAME: ${{ vars.BLOG_NAME }}  # You'll need to set this as a repository variable
@@ -67,44 +67,91 @@ jobs:
           # Create posts directory if it doesn't exist
           mkdir -p posts
           
-          # Download the template from the gist
-          curl -s "$GIST_URL" -o template.html
+          post_file="posts/${{ steps.discussion.outputs.number }}.html"
           
-          # Read the template file
-          template_content=$(cat template.html)
-          
-          # Get the discussion data from the previous step
-          title="${{ steps.discussion.outputs.title }}"
-          number="${{ steps.discussion.outputs.number }}"
-          
-          # Get repository info
-          repo_path="${{ github.repository }}"
-          blog_name="$BLOG_NAME"
-          
-          # Escape special characters for sed (more reliable approach)
-          escaped_title=$(printf '%s\n' "$title" | sed 's/[/]/\\&/g' | sed 's/&/\\&/g')
-          escaped_blog_name=$(printf '%s\n' "$blog_name" | sed 's/[/]/\\&/g' | sed 's/&/\\&/g')
-          escaped_repo_path=$(printf '%s\n' "$repo_path" | sed 's/[/]/\\&/g' | sed 's/&/\\&/g')
-          
-          # Replace placeholders in the template step by step (except content)
-          echo "$template_content" | sed "s|{{ discussion\.title }}|$escaped_title|g" > temp_template.html
-          
-          # Replace the discussion.id placeholder with the discussion number
-          sed "s|{{ discussion\.id }}|$number|g" temp_template.html > temp_template2.html
-          
-          # Replace blog.name with the blog name from variables
-          sed "s|{{ blog\.name }}|$escaped_blog_name|g" temp_template2.html > temp_template3.html
-          
-          # Replace repo.path with the repository path (owner/repo)
-          sed "s|{{ repo\.path }}|$escaped_repo_path|g" temp_template3.html > temp_template4.html
-          
-          # Save the HTML content to a temporary file for safer handling
-          cat << 'CONTENT_EOF' > temp_html_content.html
+          # Check if this is an edit (post file already exists)
+          if [ -f "$post_file" ]; then
+            echo "Post exists - updating existing post"
+            
+            # Get the discussion data from the previous step
+            title="${{ steps.discussion.outputs.title }}"
+            number="${{ steps.discussion.outputs.number }}"
+            
+            # Save the HTML content to a temporary file for safer handling
+            cat << 'CONTENT_EOF' > temp_html_content.html
           ${{ steps.discussion.outputs.content }}
           CONTENT_EOF
+            
+            # Use Python to update specific elements in the existing HTML file
+            python3 << 'PYTHON_EOF'
+          import re
           
-          # Use Python to replace the content placeholder (more reliable for complex HTML)
-          python3 << 'PYTHON_EOF'
+          # Read the existing HTML file
+          with open('${{ steps.discussion.outputs.number }}.html'.replace('${{ steps.discussion.outputs.number }}', '${{ steps.discussion.outputs.number }}'), 'r') as f:
+              existing_html = f.read()
+          
+          # Read the new content
+          with open('temp_html_content.html', 'r') as f:
+              new_content = f.read()
+          
+          # Update the title element with id="title-forpost"
+          new_title = '''${{ steps.discussion.outputs.title }}'''
+          existing_html = re.sub(r'(<[^>]*id=["\']title-forpost["\'][^>]*>)[^<]*(<\/[^>]*>)', 
+                                r'\1' + new_title + r'\2', existing_html)
+          
+          # Update the content element with id="maincontent-forpost"
+          existing_html = re.sub(r'(<[^>]*id=["\']maincontent-forpost["\'][^>]*>).*?(<\/[^>]*>)', 
+                                r'\1' + new_content + r'\2', existing_html, flags=re.DOTALL)
+          
+          # Write the updated file
+          with open('posts/${{ steps.discussion.outputs.number }}.html', 'w') as f:
+              f.write(existing_html)
+          PYTHON_EOF
+            
+            # Clean up temporary files
+            rm temp_html_content.html
+            
+          else
+            echo "New post - creating from template"
+            
+            # Download the template from the gist
+            curl -s "$GIST_URL" -o template.html
+            
+            # Read the template file
+            template_content=$(cat template.html)
+            
+            # Get the discussion data from the previous step
+            title="${{ steps.discussion.outputs.title }}"
+            number="${{ steps.discussion.outputs.number }}"
+            
+            # Get repository info
+            repo_path="${{ github.repository }}"
+            blog_name="$BLOG_NAME"
+            
+            # Escape special characters for sed (more reliable approach)
+            escaped_title=$(printf '%s\n' "$title" | sed 's/[/]/\\&/g' | sed 's/&/\\&/g')
+            escaped_blog_name=$(printf '%s\n' "$blog_name" | sed 's/[/]/\\&/g' | sed 's/&/\\&/g')
+            escaped_repo_path=$(printf '%s\n' "$repo_path" | sed 's/[/]/\\&/g' | sed 's/&/\\&/g')
+            
+            # Replace placeholders in the template step by step (except content)
+            echo "$template_content" | sed "s|{{ discussion\.title }}|$escaped_title|g" > temp_template.html
+            
+            # Replace the discussion.id placeholder with the discussion number
+            sed "s|{{ discussion\.id }}|$number|g" temp_template.html > temp_template2.html
+            
+            # Replace blog.name with the blog name from variables
+            sed "s|{{ blog\.name }}|$escaped_blog_name|g" temp_template2.html > temp_template3.html
+            
+            # Replace repo.path with the repository path (owner/repo)
+            sed "s|{{ repo\.path }}|$escaped_repo_path|g" temp_template3.html > temp_template4.html
+            
+            # Save the HTML content to a temporary file for safer handling
+            cat << 'CONTENT_EOF' > temp_html_content.html
+          ${{ steps.discussion.outputs.content }}
+          CONTENT_EOF
+            
+            # Use Python to replace the content placeholder (more reliable for complex HTML)
+            python3 << 'PYTHON_EOF'
           import re
           
           # Read the template
@@ -122,14 +169,33 @@ jobs:
           with open('posts/${{ steps.discussion.outputs.number }}.html', 'w') as f:
               f.write(final_html)
           PYTHON_EOF
+            
+            # Clean up temporary files
+            rm template.html temp_template.html temp_template2.html temp_template3.html temp_template4.html temp_html_content.html
+          fi
           
-          # Clean up temporary files
-          rm template.html temp_template.html temp_template2.html temp_template3.html temp_template4.html temp_html_content.html
-          
-      - name: Commit and push new post
+      - name: Commit and push changes
         run: |
           git config --local user.email "disblog-bot@noreply.github.com"
           git config --local user.name "DisBlog Bot"
+          
+          # Check if this was an edit or new post
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
           git add posts/${{ steps.discussion.outputs.number }}.html
-          git commit -m "[DISBLOG] 📝 Add blog post from discussion #${{ steps.discussion.outputs.number }}: ${{ steps.discussion.outputs.title }}" || exit 0
+          
+          # Determine if this is a new post or update based on git status
+          if git diff --cached --name-only | grep -q "posts/${{ steps.discussion.outputs.number }}.html"; then
+            if git ls-files --error-unmatch posts/${{ steps.discussion.outputs.number }}.html 2>/dev/null; then
+              # File exists in git, this is an update
+              git commit -m "[DISBLOG] ✏️ Update blog post from discussion #${{ steps.discussion.outputs.number }}: ${{ steps.discussion.outputs.title }}"
+            else
+              # File doesn't exist in git, this is new
+              git commit -m "[DISBLOG] 📝 Add blog post from discussion #${{ steps.discussion.outputs.number }}: ${{ steps.discussion.outputs.title }}"
+            fi
+          fi
+          
           git push
