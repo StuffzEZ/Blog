@@ -85,6 +85,7 @@ jobs:
             # Use Python to update specific elements in the existing HTML file
             python3 << 'PYTHON_EOF'
           import re
+          from html.parser import HTMLParser
           
           # Read the existing HTML file from the posts directory
           with open('posts/${{ steps.discussion.outputs.number }}.html', 'r') as f:
@@ -92,16 +93,24 @@ jobs:
           
           # Read the new content
           with open('temp_html_content.html', 'r') as f:
-              new_content = f.read()
+              new_content = f.read().strip()
           
-          # Update the title element with id="title-forpost"
+          # Update the title element with id="title-forpost" - completely replace inner content
           new_title = '''${{ steps.discussion.outputs.title }}'''
-          existing_html = re.sub(r'(<[^>]*id=["\']title-forpost["\'][^>]*>)[^<]*(<\/[^>]*>)', 
-                                r'\1' + new_title + r'\2', existing_html)
+          existing_html = re.sub(
+              r'(<[^>]*id=["\']title-forpost["\'][^>]*>).*?(</[^>]*>)', 
+              r'\1' + new_title + r'\2', 
+              existing_html, 
+              flags=re.DOTALL
+          )
           
-          # Update the content element with id="maincontent-forpost"
-          existing_html = re.sub(r'(<[^>]*id=["\']maincontent-forpost["\'][^>]*>).*?(<\/[^>]*>)', 
-                                r'\1' + new_content + r'\2', existing_html, flags=re.DOTALL)
+          # Update the content element with id="maincontent-forpost" - completely replace inner content
+          existing_html = re.sub(
+              r'(<[^>]*id=["\']maincontent-forpost["\'][^>]*>).*?(</[^>]*>)', 
+              r'\1' + new_content + r'\2', 
+              existing_html, 
+              flags=re.DOTALL
+          )
           
           # Write the updated file back to the posts directory
           with open('posts/${{ steps.discussion.outputs.number }}.html', 'w') as f:
