@@ -85,7 +85,19 @@ jobs:
             # Use Python to update specific elements in the existing HTML file
             python3 << 'PYTHON_EOF'
           import re
-          from html.parser import HTMLParser
+          
+          def replace_div_content(html, div_id, new_content):
+              """Replace content inside a div with specific id"""
+              # Pattern to match the div with the specific id and capture everything inside
+              pattern = r'(<[^>]*id=["\']' + re.escape(div_id) + r'["\'][^>]*>)(.*?)(<\/[^>]*>)'
+              
+              def replacer(match):
+                  opening_tag = match.group(1)
+                  closing_tag = match.group(3)
+                  # Clear old content and insert new content
+                  return opening_tag + new_content + closing_tag
+              
+              return re.sub(pattern, replacer, html, flags=re.DOTALL)
           
           # Read the existing HTML file from the posts directory
           with open('posts/${{ steps.discussion.outputs.number }}.html', 'r') as f:
@@ -95,22 +107,12 @@ jobs:
           with open('temp_html_content.html', 'r') as f:
               new_content = f.read().strip()
           
-          # Update the title element with id="title-forpost" - completely replace inner content
+          # Update the title element with id="title-forpost"
           new_title = '''${{ steps.discussion.outputs.title }}'''
-          existing_html = re.sub(
-              r'(<[^>]*id=["\']title-forpost["\'][^>]*>).*?(</[^>]*>)', 
-              r'\1' + new_title + r'\2', 
-              existing_html, 
-              flags=re.DOTALL
-          )
+          existing_html = replace_div_content(existing_html, 'title-forpost', new_title)
           
-          # Update the content element with id="maincontent-forpost" - completely replace inner content
-          existing_html = re.sub(
-              r'(<[^>]*id=["\']maincontent-forpost["\'][^>]*>).*?(</[^>]*>)', 
-              r'\1' + new_content + r'\2', 
-              existing_html, 
-              flags=re.DOTALL
-          )
+          # Update the content element with id="maincontent-forpost"
+          existing_html = replace_div_content(existing_html, 'maincontent-forpost', new_content)
           
           # Write the updated file back to the posts directory
           with open('posts/${{ steps.discussion.outputs.number }}.html', 'w') as f:
