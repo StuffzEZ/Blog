@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stufz | How I made a web browser as a frontend developer</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/themium/FrameworkV0@main/v0.css">
+    <header style="margin: 0; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #3c4047; color: #fff;" class="tf_f-ubuntu">
+        <div>
+        <h2 class="tf_fw-300" style="margin: 0; text-align: left;">Stufz</h2>
+        <p style="margin: 0; font-size: 1rem; opacity: 0.8; text-align: left;">A Blog Powered By DisBlog</p>
+        </div>
+        <nav style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="/Blog/" style="color: #fff; text-decoration: none;">Posts</a>
+        </nav>
+    </header>
+    <h1 id="title-forpost">How I made a web browser as a frontend developer</h1>
+    <span class="subtitle">Stufz</span>
+    <div class="marbot30"></div>
+    <hr>
+    <div id="maincontent-forpost"><p>Hi, I&#39;m StuffzEZ, a developer who likes to learn all programming languages.. But my best programming languages are frontend ones like HTML, CSS, JS etc. And this is <strong>How <em>I</em> made a web browser as a frontend developer</strong>.</p>
+<h2>The research</h2>
+<p>I had the idea of making a web browser for a long time. I wanted a new kind of web browser. One that wasn&#39;t owned by a big tech giant or took up 16GB of RAM in the background so I originally thought of something I had used for one of my other projects (<a href="https://github.com/OptionallyBlueStudios/BlueHub">BlueHub</a>), Tauri. I had used it to port my web app into a desktop app and it worked great for BlueHub; Hardly <strong>ANY</strong> resources were used. So I thought of a name, created a new project, coded it....</p>
+<blockquote>
+<p><em>What? CORS error???</em></p>
+</blockquote>
+<p>You see, the way I programmed this was by putting the content eg. google.com in an IFrame. I couldn&#39;t do multiple webviews because Tauri didn&#39;t have them then. So I realised that this wasn&#39;t going to work and I just moved on.. Until one day...</p>
+<h2>The Rediscovery</h2>
+<p>It&#39;s Monday and I am looking through my repositories when I re-discover my forgotten browser and I wonder..</p>
+<blockquote>
+<p> <em>Is this possible now?</em></p>
+</blockquote>
+<p>So I look through every corner of the Tauri documentation then, by accident, I see a GitHub repository when I mispelt something into the google search box.. <a href="https://github.com/MicrosoftEdge/WebView2Browser">MicrosoftEdge/WebView2Browser</a>. So I click on it. Now, I don&#39;t know much C++, which this web browser was written in but I thought I would give it a try so I forked it, opened it up in Visual Studio 2022 and realised....</p>
+<blockquote>
+<p><em>Wait.. This is a Visual Studio 2019 Project</em></p>
+</blockquote>
+<p>So I decided to port it to Visual Studio 2022 because I couldn&#39;t be bothered to re-download Visual Studio as a different version. After about an hour of porting, I had finally fully ported it to 2022, now I can start working on it.</p>
+<h2>Actually Coding It</h2>
+<p>After Inspecting the code for a while, whilst I am not a C++ expert, I discovered most of it was configurable extremely easily; In fact the UI was written in HTML, CSS and JavaScript! So I edited the code, mainly the CSS to make it look better but also a bit of JavaScript then I came out with this....</p>
+<h1>Welcome to Prosperity - A New Modern, Secure and Lightweight Browser For The Web</h1>
+<img width="1417" height="714" alt="image" src="https://github.com/user-attachments/assets/c3033fca-299d-4851-bc4d-f17d94f24944" />
+<img width="1915" height="995" alt="image" src="https://github.com/user-attachments/assets/f37ee52d-dc6e-42c6-a17b-ec25245518d5" />
+<img width="1911" height="997" alt="image" src="https://github.com/user-attachments/assets/60b8d942-7707-4ed5-a9a7-f266233d9036" />
+<img width="1906" height="947" alt="image" src="https://github.com/user-attachments/assets/4006a25f-5a30-4eda-b7d3-25936423b4bc" />
+<img width="1887" height="950" alt="image" src="https://github.com/user-attachments/assets/c42a5e69-ddf2-48ac-b0e1-1331acfc8219" />
+<img width="1914" height="1003" alt="image" src="https://github.com/user-attachments/assets/b79d94e2-ad5e-4e83-b24f-7e7814b00b5d" />
+
+<p>Prosperity- A Powerful, Lightweight, Secure Windows Browser Built For Privacy With No Trackers At All.</p>
+<ul>
+<li>Microsoft Edge (WebView2) Is Required.</li>
+</ul>
+<h3>Links</h3>
+<ul>
+<li><a href="https://github.com/MicrosoftEdge/WebView2Browser">Microsoft Edge WebView2 Browser</a></li>
+<li><a href="https://github.com/StuffzEZ/WebView2Browser-VS2022">Microsoft Edge WebView2 Browser, Ported For Visual Studio 2022</a></li>
+<li><a href="https://github.com/ProsperBrowse/Prosperity-Browser">Prosperity Browser- Currently In Alpha 2</a></li>
+<li><a href="https://github.com/ProsperBrowse/TAURI-Prosperity">The Old Prosperity Browser- Made with Tauri</a></li>
+<li><a href="https://quizital.github.io">QUIZITAL- Used In Demo Image 3 and 4</a></li>
+<li><a href="https://https://search.brave.com/search?q=github&source=web">&#39;github - Brave Search&#39; - used in demo image 2, also the Prosperity Search engine</a></li>
+</ul>
+<p>Article Published: 27/09/2025 16:35</p>
+</div>
+    <script src="https://giscus.app/client.js"
+        data-repo="StuffzEZ/Blog"
+        data-mapping="number"
+        data-term="3"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+</body>
+</html>
