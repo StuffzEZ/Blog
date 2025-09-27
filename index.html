@@ -44,7 +44,6 @@
     <div id="posts" class="posts-container"></div>
 
     <script>
-    // 🔧 Change these values to your repo details
     const repoUser = "StuffzEZ";
     const repoName = "Blog";
     const branch = "main";
@@ -53,22 +52,23 @@
         const container = document.getElementById("posts");
 
         try {
-        // Get list of files in posts/ from GitHub API
         const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/contents/posts?ref=${branch}`;
         const apiRes = await fetch(apiUrl);
         if (!apiRes.ok) throw new Error("Failed to fetch repo contents");
-        const files = await apiRes.json();
+        let files = await apiRes.json();
 
         // Filter only .html files
-        const htmlFiles = files.filter(f => f.name.endsWith(".html"));
+        let htmlFiles = files.filter(f => f.name.endsWith(".html"));
 
         if (htmlFiles.length === 0) {
             container.innerHTML = `<p class="noposts">There are no posts yet.</p>`;
             return;
         }
 
+        // Sort alphabetically then reverse → newest last, so reverse to show newest first
+        htmlFiles.sort((a, b) => a.name.localeCompare(b.name)).reverse();
+
         for (const file of htmlFiles) {
-            // Build raw file URL
             const rawUrl = `https://raw.githubusercontent.com/${repoUser}/${repoName}/refs/heads/${branch}/posts/${file.name}`;
             const res = await fetch(rawUrl);
             if (!res.ok) throw new Error("Failed to fetch " + file.name);
@@ -78,16 +78,14 @@
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, "text/html");
 
-            const title = doc.querySelector("#title-forpost")?.innerText || "Untitled";
-            const content = doc.querySelector("#maincontent-forpost")?.innerText || "";
+            const title = doc.querySelector("#title-forpost")?.textContent.trim() || "Untitled";
+            const content = doc.querySelector("#maincontent-forpost")?.textContent.trim() || "";
 
-            // Make preview (first 200 characters)
+            // Make preview (first 200 characters of plain text)
             const preview = content.length > 200 ? content.slice(0, 200) + "..." : content;
 
-            // Remove .html extension for link
             const postId = file.name.replace(".html", "");
 
-            // Create post element
             const div = document.createElement("div");
             div.className = "post";
             div.innerHTML = `
@@ -95,7 +93,6 @@
             <p class="preview">${preview}</p>
             `;
 
-            // Make clickable
             div.addEventListener("click", () => {
             window.location.href = `posts/${postId}`;
             });
