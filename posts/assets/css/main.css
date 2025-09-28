@@ -53,7 +53,7 @@ ol, ul {
     padding-left: 0;
 }
 
-blockquote {
+blockquote, pre {
   display: inline-block;           /* shrink to fit text width */
   padding-left: 10px;
   padding-right: 10px;
