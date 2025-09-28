@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "thqaxt8zw3");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stufz | How to make a Minecraft server (BONUS: Cross Platform aswell)- 100% Free</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/themium/FrameworkV0@main/v0.css">
+    <header style="margin: 0; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #3c4047; color: #fff;" class="tf_f-ubuntu">
+        <div>
+        <h2 class="tf_fw-300" style="margin: 0; text-align: left;">Stufz</h2>
+        <p style="margin: 0; font-size: 1rem; opacity: 0.8; text-align: left;">A Blog Powered By DisBlog</p>
+        </div>
+        <nav style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="/Blog/" style="color: #fff; text-decoration: none;">Posts</a>
+        </nav>
+    </header>
+    <h1 id="title-forpost">How to make a Minecraft server (BONUS: Cross Platform aswell)- 100% Free | A Blog Made By StuffzEZ</h1>
+    <span class="subtitle">Stufz</span>
+    <div class="marbot30"></div>
+    <hr>
+    <div id="maincontent-forpost" style="margin-left: 150px; margin-right: 150px;"><p>Hi, I&#39;m StuffzEZ and this guide will tell you how you can host a fun, cross platform Minecraft server, for free! This guide has 2 parts: The Aternos Method and the DIY method. Today I will be talking about the DIY method.</p>
+<h2>Requirements</h2>
+<ul>
+<li>You must have a server. I recommend getting an oracle cloud always free server with the maximum specs you can get. There are plenty of tutorials on YouTube for this but make sure you install ubuntu server. You can also use a home server/home lab for this, again use ubuntu server</li>
+<li>You must be willing to maintain it</li>
+<li>You must have a computer that you can use to connect to the cloud instance and to configure it on</li>
+<li>You must have basic knowledge of how to use things like this</li>
+<li>A terminal program (I recommend MobaXterm Personal- the portable, free version though)</li>
+</ul>
+<h2>Step 1: Installing CasaOS</h2>
+<p>To make this guide easier, we will install something called CasaOS which will let you connect to your cloud instance via a GUI (graphical user interface) instead of a CLI (command line interface). To do this, paste the following command into your CLI:</p>
+<pre><code>curl -fsSL https://get.casaos.io | sudo bash
+</code></pre>
+<p>Now, casaos should begin installing and you can go and have a break. This may take a while. After this, if you come back and see NO major errors (lots of red text commonly means a major error) then first make sure that the port 80 is exposed on your cloud provider (on oracle, just expose all ports and type <code>sudo ufw enable</code> and <code>sudo ufw allow 80</code> into the terminal so that you won&#39;t have to do this much). Then go to your server&#39;s IP. Eg:</p>
+<pre><code>http://123.456.789.101
+</code></pre>
+<p>This should then bring you to the CasaOS user creation screen. Create a user to access the dashboard.</p>
+<h2>Step 2: Installing Crafty</h2>
+<p>Now, there are many ways to host a Minecraft server. But one of the ways is with Crafty. It is a self hosted Minecraft Server control and management app. We recommend this because it is easy to use and setup. To install it, go to the CasaOS app store and search for crafty. Then install it. If you can&#39;t find crafty, install the BigBear CasaOS app store (which should be installed by default). Once you have installed Crafty, go back to your CLI and type:</p>
+<pre><code>sudo ufw allow 8443/tcp &amp;&amp; sudo ufw allow 8123/tcp &amp;&amp; sudo ufw allow 19132/udp &amp;&amp; sudo ufw allow 25500:25600/tcp &amp;&amp; sudo ufw reload
+</code></pre>
+<p>Then go to your ip port 8111. Eg:</p>
+<pre><code>http://123.456.789.101:8111
+</code></pre>
+<p>And then create an account. Now you should be in Crafty.</p>
+<h2>Step 3: Creating A Server</h2>
+<p>On the Crafty sidebar, press the servers icon and press create server. Even if you play on bedrock (we will configure later, although java is recommended) select:</p>
+<pre><code>Server Type: Minecraft Servers
+Server Select: Paper
+Server Version: Latest Version Supported By Bedrock And Java (Currently 1.21.8)
+Server Name: (Put your server name here)
+Minimum Memory: (Recommended 3GB)
+Maximum Memory: (Recommended 10GB- you can get upto 32GB free ram when creating your oracle cloud instance - OCI - I think)
+Server Port: 25565
+</code></pre>
+<p>Then Press &#39;Build Server&#39;. Now we can boot the server up then get some plugins.</p>
+<h2>Step 4: First Boot</h2>
+<p>To boot your server, press the Start button on the server control pannel. This should boot it up. Once you see a blue message saying something like:</p>
+<pre><code>Done (4.548s)! For help, type &quot;help&quot;
+</code></pre>
+<p>Then it is fully booted. This means your world should also be fully generated.</p>
+<h2>Step 5: Adding Plugins</h2>
+<p>Since we are running Paper, a (technically) modded version of Minecraft which can be connected to with any client (Fun Fact: Paper is used on servers like Hypixel etc.) then you have the ability to add plugins. Here below will be a guide on where to get plugins and what plugins to get.</p>
+<h3>Where to get plugins</h3>
+<p>You can get plugins from many places but the most trusted place is Modrinth, after that is SpigotMC. Remember: If it doesn&#39;t have a high download count, it MIGHT not be safe and MAY have a virus.</p>
+<h3>What plugins to get</h3>
+<p>There is a wide variety of plugins for everything but here are our top picks: </p>
+<ul>
+<li>Always, on every server, get [<a href="https://modrinth.com/plugin/luckperms">Luckperms</a>], [<a href="https://modrinth.com/plugin/placeholderapi">PAPI</a>] and [<a href="https://modrinth.com/plugin/essentialsx">EssentialsX</a>] </li>
+<li>For Guns, get [<a href="https://modrinth.com/plugin/qualityarmory">Quality Armory</a>] </li>
+<li>For bedrock compatibility, use [<a href="https://modrinth.com/mod/floodgate">Floodgate</a>], [<a href="https://modrinth.com/plugin/geyser">GeyserMC</a>], <a href="https://geysermc.org/wiki/other/geyserconnect">GeyserConnect</a>, <a href="https://geysermc.org/wiki/other/thirdpartycosmetics">ThirdPartyCosmetics</a> and <a href="https://geysermc.org/wiki/other/geyseroptionalpack">GeyserOptionalPack</a></li>
+<li>For a RPG fun skills levelling plugin, use [<a href="https://modrinth.com/plugin/auraskills">AuraSkills</a>] </li>
+<li>For optimisation, use [<a href="https://modrinth.com/plugin/chunky">Chunky</a>] and [<a href="https://modrinth.com/mod/spark">Spark</a>] </li>
+<li>For extensive logging and Anti-Griefing, use [<a href="https://modrinth.com/plugin/coreprotect">CoreProtect</a>] </li>
+<li>For custom crafting recipes, use [<a href="https://modrinth.com/plugin/customcrafting">CustomCrafting</a>] </li>
+<li>For controlling access to the end dimension, use EndDimensionControl </li>
+<li>For <a href="https://modrinth.com/plugin/essentialsx-chat-module">EssentialsX Chat</a> formatting, use <a href="https://modrinth.com/plugin/essentialsx-chat-module">EssentialsX Chat</a> </li>
+<li>For spawn control, use [<a href="https://modrinth.com/plugin/essentialsx-spawn">EssentialsX Spawn</a>] </li>
+<li>For converting images to maps, use [<a href="https://modrinth.com/plugin/imageframe">ImageFrame</a>] </li>
+<li>For seeing inventories eg. if a player hacks an item and you want to remove it, use [<a href="https://modrinth.com/plugin/invsee++">InvSee++</a>] </li>
+<li>For Lifesteal, use [<a href="https://modrinth.com/plugin/lifestealz">LifeStealz</a>] </li>
+<li>For sharing logs, use <a href="https://modrinth.com/plugin/mclogs">MCLogs</a></li>
+<li>For minecart speed control, use <a href="https://www.spigotmc.org/resources/minecart-speed-plus.69639/">Minecart Speed Plus</a></li>
+<li>For Anti-Xray, use <a href="https://modrinth.com/plugin/minertrack">MinerTrack</a></li>
+<li>For moderation, use <a href="https://modrinth.com/plugin/moderex">ModereX</a></li>
+<li>For multiple worlds, use <a href="https://modrinth.com/plugin/multiverse-core">Multiverse Core</a>, <a href="https://modrinth.com/plugin/multiverse-inventories">Multiverse Inventories</a>, <a href="https://modrinth.com/plugin/multiverse-netherportals">Multiverse Nether Portals</a> and <a href="https://modrinth.com/plugin/multiverse-portals">Multiverse Portals</a></li>
+<li>For maintenance mode, use <a href="https://modrinth.com/plugin/maintenance">Maintenance</a></li>
+<li>For customizing your server list, use <a href="https://modrinth.com/plugin/advancedserverlist">AdvancedServerList</a></li>
+<li>For toggling PvP, use <a href="https://modrinth.com/plugin/pvp-toggle">PVPToggle</a></li>
+<li>For sitting on slabs and stairs, use <a href="https://modrinth.com/plugin/stairsit">Sit</a></li>
+<li>For tweaks to your SMP, use <a href="https://modrinth.com/plugin/smptweaks">SMPTweaks</a></li>
+<li>For automatic vein mining, use <a href="https://modrinth.com/datapack/veinminer">VeinMiner</a></li>
+<li>For automatic version switching, use [<a href="https://modrinth.com/plugin/viaversion">ViaVersion</a>] </li>
+<li>For admin building tools, use [<a href="https://modrinth.com/plugin/worldedit">WorldEdit</a>]</li>
+</ul>
+<h3>Things you should know</h3>
+<ul>
+<li>You can commonly install old plugins on new versions</li>
+<li>You can install Bukkit and Spigot plugins on Paper but not Paper plugins on spigot or bukkit</li>
+<li>You will need to configure plugins by editing the config files. This is the same with EVERY minecraft host. You also will need to edit your server.properties to change things like resource packs.</li>
+<li>Every new bedrock update, you have to update Geyser</li>
+</ul>
+<h3>How to add plugins</h3>
+<p>To add plugins, go to CasaOS &gt; Files &gt; AppData &gt; crafty &gt; servers &gt; [YOUR SERVER ID - You can find in server configuration tab] &gt; plugins &gt; Add Files &gt; Upload Files and upload the plugins then reboot your server</p>
+<h2>Step 6: Joining your server</h2>
+<p>To join your server go to YOUR-IP:25565 as the Java Address or YOUR-IP:19132 as the BEDROCK address then if you type</p>
+<pre><code>op YOUR-USERNAME
+</code></pre>
+<p>In the server console on Crafty, you should have OP.</p>
+<h2>Links</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=qVwo2P4uCZM">How to get a oracle server for free</a></li>
+<li><a href="https://www.oracle.com/cloud/free/">Oracle Cloud Free Tier</a></li>
+<li><a href="https://craftycontrol.com/">Crafty Controller Website</a></li>
+<li><a href="https://casaos.zimaspace.com/">CasaOS</a></li>
+<li><a href="http://demo.casaos.io/#/login">CasaOS Demo- Username &amp; Password is CasaOS</a></li>
+<li><a href="https://modrinth.com">Modrinth</a></li>
+</ul>
+ <script>
+        if (window.location = 'https://stuffzez.github.io/Blog/template') {
+          window.location.href = '/Blog/'
+        }
+    </script></div>
+    <hr>
+    <p>© StuffzEZ 2025 | Blog Generated & Powered By <a href="https://github.com/StuffzEZ/DisBlog">DisBlog</a></p>
+    <script src="https://giscus.app/client.js"
+        data-repo="StuffzEZ/Blog"
+        data-mapping="number"
+        data-term="5"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+<script src="assets/js/imagezoom.js"></script>
+</body>
+</html>
