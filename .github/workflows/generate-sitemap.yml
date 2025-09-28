@@ -22,7 +22,7 @@ jobs:
       id: sitemap
       uses: cicirello/generate-sitemap@v1
       with:
-        base-url-path: https://yourdomain.com
+        base-url-path: https://stuffzez.github.io/Blog/
         path-to-root: .
         include-pdf: false
         include-html: true
@@ -43,6 +43,9 @@ jobs:
         echo "Checking if sitemap.xml exists and has changes..."
         ls -la sitemap.xml || echo "sitemap.xml not found"
         
+        echo "Git status before check:"
+        git status --porcelain
+        
         if [ ! -f "sitemap.xml" ]; then
           echo "Sitemap file not found, treating as new file"
           echo "changed=true" >> $GITHUB_OUTPUT
@@ -54,14 +57,27 @@ jobs:
           echo "changed=true" >> $GITHUB_OUTPUT
         fi
         
-        echo "Git status:"
+        echo "Final git status:"
         git status --porcelain
+        echo "Changed value: $(grep changed $GITHUB_OUTPUT || echo 'not found')"
     
     - name: Commit sitemap changes
-      if: steps.verify-changed-files.outputs.changed == 'true'
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        
+        echo "Git status before add:"
+        git status --porcelain
+        
         git add sitemap.xml
-        git commit -m "Update sitemap.xml - ${{ steps.sitemap.outputs.url-count }} URLs found"
-        git push
+        
+        echo "Git status after add:"
+        git status --porcelain
+        
+        if git diff --cached --quiet; then
+          echo "No staged changes to commit"
+        else
+          echo "Committing changes..."
+          git commit -m "Update sitemap.xml - ${{ steps.sitemap.outputs.url-count }} URLs found"
+          git push
+        fi
