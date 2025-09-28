@@ -40,28 +40,28 @@ jobs:
     - name: Check for sitemap changes
       id: verify-changed-files
       run: |
-        if git diff --quiet HEAD -- sitemap.xml; then
+        echo "Checking if sitemap.xml exists and has changes..."
+        ls -la sitemap.xml || echo "sitemap.xml not found"
+        
+        if [ ! -f "sitemap.xml" ]; then
+          echo "Sitemap file not found, treating as new file"
+          echo "changed=true" >> $GITHUB_OUTPUT
+        elif git diff --quiet HEAD -- sitemap.xml 2>/dev/null; then
+          echo "No changes detected in sitemap.xml"
           echo "changed=false" >> $GITHUB_OUTPUT
         else
+          echo "Changes detected in sitemap.xml"
           echo "changed=true" >> $GITHUB_OUTPUT
         fi
+        
+        echo "Git status:"
+        git status --porcelain
     
-    - name: Create Pull Request
+    - name: Commit sitemap changes
       if: steps.verify-changed-files.outputs.changed == 'true'
-      uses: peter-evans/create-pull-request@v5
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: 'Update sitemap.xml'
-        title: 'Update sitemap.xml'
-        body: |
-          Auto-generated sitemap update
-          
-          - URLs found: ${{ steps.sitemap.outputs.url-count }}
-          - URLs excluded: ${{ steps.sitemap.outputs.excluded-count }}
-          - Sitemap path: ${{ steps.sitemap.outputs.sitemap-path }}
-          
-          This PR was automatically created by the Generate Sitemap workflow.
-        branch: update-sitemap
-        delete-branch: true
-        add-paths: |
-          sitemap.xml
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add sitemap.xml
+        git commit -m "Update sitemap.xml - ${{ steps.sitemap.outputs.url-count }} URLs found"
+        git push
