@@ -1,5 +1,4 @@
 name: Generate Sitemap
-
 on:
   push:
     branches:
@@ -10,18 +9,15 @@ on:
       - main
       - master
   workflow_dispatch:
-
 jobs:
   sitemap_job:
     runs-on: ubuntu-latest
     name: Generate a sitemap
-
     steps:
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
     - name: Generate the sitemap
       id: sitemap
       uses: cicirello/generate-sitemap@v1
@@ -32,12 +28,40 @@ jobs:
         include-html: true
         sitemap-format: xml
         drop-html-extension: true
-        exclusions: |
+        exclude-paths: |
           template.html
           posts/assets/*
-
     - name: Output stats
       run: |
         echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
         echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
         echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
+    
+    - name: Check for sitemap changes
+      id: verify-changed-files
+      run: |
+        if git diff --quiet HEAD -- sitemap.xml; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Create Pull Request
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'Update sitemap.xml'
+        title: 'Update sitemap.xml'
+        body: |
+          Auto-generated sitemap update
+          
+          - URLs found: ${{ steps.sitemap.outputs.url-count }}
+          - URLs excluded: ${{ steps.sitemap.outputs.excluded-count }}
+          - Sitemap path: ${{ steps.sitemap.outputs.sitemap-path }}
+          
+          This PR was automatically created by the Generate Sitemap workflow.
+        branch: update-sitemap
+        delete-branch: true
+        add-paths: |
+          sitemap.xml
