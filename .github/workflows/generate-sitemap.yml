@@ -23,7 +23,7 @@ jobs:
       id: sitemap
       uses: cicirello/generate-sitemap@v1
       with:
-        base-url-path: https://yourdomain.com
+        base-url-path: https://stuffzez.github.io/Blog/
         path-to-root: .
         include-pdf: false
         include-html: true
@@ -64,8 +64,8 @@ jobs:
     
     - name: Commit sitemap changes
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email "sitemap-generator-bot-action@github.com"
+        git config --local user.name "Sitemap Generator"
         
         echo "Git status before add:"
         git status --porcelain
@@ -79,6 +79,6 @@ jobs:
           echo "No staged changes to commit"
         else
           echo "Committing changes..."
-          git commit -m "Update sitemap.xml - ${{ steps.sitemap.outputs.url-count }} URLs found"
+          git commit -m "[SITEMAP] 🔗 ${{ steps.sitemap.outputs.url-count }} URLs found. Updated sitemap.xml in root directory."
           git push
         fi
