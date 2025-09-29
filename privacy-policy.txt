@@ -1,0 +1,7 @@
+This site uses Microsoft Clarity. If you do not agree to this, please leave the site. Thank you!
+
+Microsoft Clarity is an analytics platform that can generate heatmaps of popular areas on this site.
+It is used on every page (except this one).
+We have disabled tracking cookies on Microsoft Clarity.
+
+If you want your data removed, please contact me in the OptionallyBlueStudios/Contact repository on github (in the issues tab)
