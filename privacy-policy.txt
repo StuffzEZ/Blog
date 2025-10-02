@@ -1,7 +1,52 @@
-This site uses Microsoft Clarity. If you do not agree to this, please leave the site. Thank you!
+StuffzEZ Blog (Stufz) – Privacy Policy
 
-Microsoft Clarity is an analytics platform that can generate heatmaps of popular areas on this site.
-It is used on every page (except this one).
-We have disabled tracking cookies on Microsoft Clarity.
+This Privacy Policy explains how StuffzEZ Blog (“this website,” “we,” or “our”) handles data when you use or interact with our site.
 
-If you want your data removed, please contact me in the OptionallyBlueStudios/Contact repository on github (in the issues tab)
+------------------------------------------------------------
+Services That May Collect Data
+------------------------------------------------------------
+This website makes use of third-party services that may collect certain information:
+- YouTube Embeds – for displaying videos
+- Microsoft Clarity – for analytics and website usage insights
+- Giscus – for comments and reactions on blog posts
+
+------------------------------------------------------------
+External Links
+------------------------------------------------------------
+Our website may contain links to external websites. At the time of publishing, we ensure these links are trusted and safe. 
+However, we are not responsible for the content, security, or practices of external websites. Any activity that occurs 
+outside of this website is beyond our control.
+
+------------------------------------------------------------
+YouTube Embeds
+------------------------------------------------------------
+We typically use YouTube’s "no-cookie" embed option to reduce tracking when displaying videos. This means that YouTube will 
+not set cookies until you actively play a video. However, playing an embedded video may allow YouTube/Google to collect 
+usage data according to their own privacy policy.
+
+------------------------------------------------------------
+Giscus (Comments & Reactions)
+------------------------------------------------------------
+This site uses Giscus, a comment system powered by GitHub Discussions.
+- To comment or react, you must sign in with a GitHub account.
+- Your interactions (comments, reactions, profile information) are public and stored on GitHub, not on this website.
+- By using Giscus, you agree to GitHub’s Privacy Policy: https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement
+
+------------------------------------------------------------
+Microsoft Clarity (Analytics)
+------------------------------------------------------------
+This website uses Microsoft Clarity to understand how visitors interact with the site.
+- Clarity generates heatmaps and anonymized usage analytics.
+- We have disabled session tracking cookies to minimize data collection.
+- Clarity is active on every page except this Privacy Policy page.
+- If you do not consent to this, we kindly ask that you discontinue using the site.
+
+For more details, see Microsoft Clarity’s Privacy Policy: https://clarity.microsoft.com/terms
+
+------------------------------------------------------------
+Contact Us
+------------------------------------------------------------
+If you have questions about this Privacy Policy or how your data is handled, you can contact us via:
+- GitHub Issues (Preferred): https://github.com/OptionallyBlueStudios/Contact/issues
+
+Responses are typically faster through GitHub Issues.
