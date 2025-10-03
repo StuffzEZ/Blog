@@ -94,19 +94,19 @@
             const preview = content.length > 200 ? content.slice(0, 200) + "..." : content;
 
             const postId = file.name.replace(".html", "");
-
-            const div = document.createElement("div");
-            div.className = "post";
-            div.innerHTML = `
-            <h2>${title}</h2>
-            <p class="preview">${preview}</p>
-            `;
-
-            div.addEventListener("click", () => {
-            window.location.href = `posts/${postId}`;
-            });
-
-            container.appendChild(div);
+            if (postId !== "privacy-policy.txt") {
+                const div = document.createElement("div");
+                div.className = "post";
+                div.innerHTML = `
+                <h2>${title}</h2>
+                <p class="preview">${preview}</p>
+                `;
+                div.addEventListener("click", () => {
+                window.location.href = `posts/${postId}`;
+                });
+    
+                container.appendChild(div);
+            }
         }
         } catch (err) {
         console.error(err);
