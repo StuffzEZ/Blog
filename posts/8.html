@@ -32,15 +32,108 @@
     <div id="maincontent-forpost" style="margin-left: 150px; margin-right: 150px;"><p>Hi, i&#39;m Stuf_y and I made a discord AI bot that YOU can use for free.</p>
 <p>Recently, I have been wanting to make my own AI. I have been wanting to make an AI smarter, better and faster than most others. I wanted it more reliable and more easy to access and most importantly FREE. So thats when I made....</p>
 <h1>Tye AI</h1>
-<p>Tye AI is a discord bot that you can chat to completely FOR FREE. And thats not even the best part. Tye AI is (mostly) open source for ANYONE to host. In this series of blog posts, I will go over every little detail of how YOU can host it (hosting in PT2). But first, heres how <em>you</em> can access it.</p>
+<p>Tye AI is a discord bot that you can chat to completely FOR FREE. And thats not even the best part. Tye AI is (mostly) open source for ANYONE to host. In this series of blog post, I will go over every little detail of how YOU can host and use it. But first, heres how <em>you</em> can access it.</p>
 <h2>Accessing Tye</h2>
-<p>To access Tye, you must FIRST join the discord server. This is crucial so you can message the AI. To join the discord server, click <a href="https://discord.gg/DbkwXTSt3y">here</a>. Once you have joined the discord server, go to the <code>#subscribe</code> channel and press subscribe. After this, you will get a DM from the bot. You can now talk to the bot. </p>
+<p>To access Tye, you must FIRST join the discord server. This is crucial so you can message the AI. To join the discord server, click <a href="https://discord.gg/DbkwXTSt3y">here</a>. Once you have joined the discord server, go to the <code>#subscribe</code> channel and press subscribe. After this, you will get a DM from the bot. You can now talk to the bot.</p>
 <blockquote>
-<p>NOTE: The bot is currently in BETA</p>
+<p>NOTE: The bot is currently in BETA so may not always work</p>
 </blockquote>
+<h2>Hosting Tye</h2>
 <blockquote>
-<p>I will update this post to contain the guide on how to host the bot tomorrow!</p>
-</blockquote></div>
+<p>NOTE: To make Tye free for everyone, we had to think carefully about ways around roadblocks that would make us have to pay so it can be quite complicated sometimes!!</p>
+</blockquote>
+<p>To host Tye, you need the following:</p>
+<ul>
+<li>A platform to host the discord bot on (Recommended: Railway)</li>
+<li>A server with docker and n8n (Recommended: Oracle Cloud free server)</li>
+<li>A discord account</li>
+<li>Basic n8n knowledge</li>
+<li>A github account</li>
+</ul>
+<h3>PART 1: Creating the n8n workflow</h3>
+<blockquote>
+<p>NOTE: You need n8n setup first</p>
+</blockquote>
+<ol>
+<li>Open your n8n dashboard</li>
+<li>Press create workflow</li>
+</ol>
+<img width="180" height="60" alt="image" src="https://github.com/user-attachments/assets/10ab8634-0a81-4de2-91bc-9a64f66d6595" />
+3) Add the 'webhook' node
+   - Add authentication and set your own credentials
+   - Set respond to 'Using respond to webhook node'
+4) Connect an 'AI Agent' node to it
+   - Set prompt (user message) to `{{ $json.query.prompt }}`
+   - And create your own system message. Currently there is not a public system prompt for Tye.
+   - Turn on automatically passthrough binary images
+   - Enable fallback model
+5) Connect the models you want
+   - If you want free AI models, use `google/gemma-4-26b-a4b-it:free` for backup and `openai/gpt-oss-120b:free` for the main model
+   - For setting up openrouter, just create an account then make an api key [here](https://openrouter.ai)
+6) Connect the tools you want
+   - You can browse the tool library [here](https://github.com/TyeArtifical/Brains/tree/main/tools)
+7) Connect the memory that you want
+   - We recommend simple memory
+   - Set the session id to define below and the sessionid key to `{{ $json.query.sessionid }}`
+   - Set the context window length to 10
+8) Connect the 'Respond to webhook' node to the output of the AI agent.
+   - Set 'Respond with' to 'Text'
+   - Set 'Response Body' to `{{ $json.output }}`
+> Well done: You have now finished setting up n8n<blockquote>
+<p>NOTE: To add things to n8n from the GitHub library, copy the JSON then paste it into n8n</p>
+</blockquote>
+<h3>PART 2: Setting up the discord bot</h3>
+<ol>
+<li>Go to the <a href="https://discord.com/developers/home">discord developer portal</a> and create an application<ul>
+<li>Get your bot token </li>
+<li>Customise your bot</li>
+</ul>
+</li>
+<li>Create a discord server and add the bot to the server<ol>
+<li>Create a discord server</li>
+<li>Add a role to the discord server for people who can use Tye. Save the ID for this for later. DO NOT GIVE YOURSELF THIS ROLE YET.</li>
+<li>Go to OAuth2 on the discord bot panel</li>
+<li>Select &quot;Bot&quot;</li>
+<li>Select Administrator as the bot permissions</li>
+</ol>
+</li>
+</ol>
+<h3>PART 3: Setting up your bot hosting</h3>
+<blockquote>
+<p>NOTE: For this guide, we will be using Railway which is free and simple.</p>
+</blockquote>
+<ol>
+<li>Fork the <a href="https://github.com/TyeArtifical/Discord-Bot-Backend">Backend Repo</a></li>
+<li>Go to Railway and press new project</li>
+<li>Press &#39;Deploy from GitHub&#39;</li>
+<li>Select the repo you just forked.</li>
+<li>Configure the following environment variables:</li>
+</ol>
+<ul>
+<li><code>BOT_TOKEN</code> - Your discord bot token</li>
+<li><code>WEBHOOK_BASE_URL</code> - Your production webhook URL from n8n</li>
+<li><code>ALLOWED_GUILD_ID</code> - Your discord server ID</li>
+<li><code>ALLOWED_ROLE_ID</code> - The role ID that is allowed to use Tye</li>
+<li><code>WEBHOOK_USER</code> the username for basic auth on the webhook on n8n</li>
+<li><code>WEBHOOK_PASS</code> the password for basic auth on the webhook on n8n</li>
+</ul>
+<ol start="6">
+<li>Deploy the code</li>
+</ol>
+<h3>PART 4: Testing</h3>
+<ol>
+<li>Give yourself the role that lets you use Tye.</li>
+<li>You should get a DM from Tye. You should now be able to chat to it. If you do not get a DM, check the logs on Railway.</li>
+<li>Send a message to Tye.<ul>
+<li>If you get an error instantly, something like the credentials are wrong or you have not enabled the workflow for production on n8n.</li>
+<li>If you get an error after quite a while, it has taken too long. Check the executions on n8n to fix this.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>NOTE: If you need help, please feel free to comment below.</p>
+</blockquote>
+<p>Now, you have completed the setup guide for hosting Tye AI and you have your own!</p></div>
     <hr>
     <p>© StuffzEZ 2025 | Blog Generated & Powered By <a href="https://github.com/StuffzEZ/DisBlog">DisBlog</a></p>
     <script src="https://giscus.app/client.js"
