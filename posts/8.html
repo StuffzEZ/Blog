@@ -59,24 +59,24 @@
 <li>Press create workflow</li>
 </ol>
 <img width="180" height="60" alt="image" src="https://github.com/user-attachments/assets/10ab8634-0a81-4de2-91bc-9a64f66d6595" />
-3) Add the 'webhook' node
+3. Add the 'webhook' node
    - Add authentication and set your own credentials
    - Set respond to 'Using respond to webhook node'
-4) Connect an 'AI Agent' node to it
+4. Connect an 'AI Agent' node to it
    - Set prompt (user message) to `{{ $json.query.prompt }}`
    - And create your own system message. Currently there is not a public system prompt for Tye.
    - Turn on automatically passthrough binary images
    - Enable fallback model
-5) Connect the models you want
+5. Connect the models you want
    - If you want free AI models, use `google/gemma-4-26b-a4b-it:free` for backup and `openai/gpt-oss-120b:free` for the main model
    - For setting up openrouter, just create an account then make an api key [here](https://openrouter.ai)
-6) Connect the tools you want
+6. Connect the tools you want
    - You can browse the tool library [here](https://github.com/TyeArtifical/Brains/tree/main/tools)
-7) Connect the memory that you want
+7. Connect the memory that you want
    - We recommend simple memory
    - Set the session id to define below and the sessionid key to `{{ $json.query.sessionid }}`
    - Set the context window length to 10
-8) Connect the 'Respond to webhook' node to the output of the AI agent.
+8. Connect the 'Respond to webhook' node to the output of the AI agent.
    - Set 'Respond with' to 'Text'
    - Set 'Response Body' to `{{ $json.output }}`
 > Well done: You have now finished setting up n8n<blockquote>
