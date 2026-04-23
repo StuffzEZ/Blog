@@ -70,6 +70,10 @@ img {
     height: auto;      /* automatically scale height to keep aspect ratio */
 }
 
+p.preview, p.post {
+    color: white;
+}
+
 /* Thumbnail images */
 img {
   cursor: pointer;
