@@ -23,7 +23,7 @@ jobs:
       id: sitemap
       uses: cicirello/generate-sitemap@v1
       with:
-        base-url-path: https://stuffzez.github.io/Blog/
+        base-url-path: https://blog.stufy.qzz.io/
         path-to-root: .
         include-pdf: false
         include-html: true
