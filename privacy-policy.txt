@@ -48,5 +48,8 @@ Contact Us
 ------------------------------------------------------------
 If you have questions about this Privacy Policy or how your data is handled, you can contact us via:
 - GitHub Issues (Preferred): https://github.com/OptionallyBlueStudios/Contact/issues
+- Email: contact@blog.stufy.qzz.io
 
 Responses are typically faster through GitHub Issues.
+
+Microsoft terms: https://www.microsoft.com/en-gb/privacy/privacystatement
